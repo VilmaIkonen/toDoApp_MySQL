@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.querySelector('table tbody').addEventListener('click', function(event) {
-    if (event.target.classtodo === "delete-row-btn") {
+    if (event.target.className === "delete-row-btn") {
         deleteRowById(event.target.dataset.id);
     }
-    if (event.target.classtodo === "edit-row-btn") {
+    if (event.target.className === "edit-row-btn") {
         handleEditRow(event.target.dataset.id);
     }
 });

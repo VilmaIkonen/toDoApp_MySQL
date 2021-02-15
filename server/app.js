@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const dotenv = require('dotenv');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 dotenv.config();
 
 const dbService = require('./dbService');
@@ -11,16 +11,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended : false }));
 
-const CONNECTION_URL = process.env.MONGODB_URI;
+// const CONNECTION_URL = process.env.MONGODB_URI;
 
-mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+// mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true});
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  // we're connected!
-  console.log('connected to MongoDB')
-});
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function() {
+//   // we're connected!
+//   console.log('connected to MongoDB')
+// });
 
 // create
 app.post('/insert', (request, response) => {
