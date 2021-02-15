@@ -4,6 +4,10 @@ main {
     text-align: center;
 }
 
+#add-todo-btn{
+    margin: .5rem;
+}
+
 table {
     margin: 50px auto;
 }
@@ -15,4 +19,8 @@ table, th, td {
 
 th, td {
     padding: 5px;
+}
+
+.hiddenId {
+    display: none;
 }

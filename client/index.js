@@ -15,15 +15,16 @@ document.querySelector('table tbody').addEventListener('click', function(event) 
 });
 
 const updateBtn = document.querySelector('#update-row-btn');
-const searchBtn = document.querySelector('#search-btn');
 
-searchBtn.onclick = function() {
-    const searchValue = document.querySelector('#search-input').value;
+// const searchBtn = document.querySelector('#search-btn');
 
-    fetch('http://localhost:5000/search/' + searchValue)
-    .then(response => response.json())
-    .then(data => loadHTMLTable(data['data']));
-}
+// searchBtn.onclick = function() {
+//     const searchValue = document.querySelector('#search-input').value;
+
+//     fetch('http://localhost:5000/search/' + searchValue)
+//     .then(response => response.json())
+//     .then(data => loadHTMLTable(data['data']));
+// }
 
 function deleteRowById(id) {
     fetch('http://localhost:5000/delete/' + id, {
@@ -96,7 +97,7 @@ function insertRowIntoTable(data) {
     for (var key in data) {
         if (data.hasOwnProperty(key)) {
             if (key === 'dateAdded') {
-                data[key] = new Date(data[key]).toLocaleString();
+                data[key] = new Date(data[key]).toLocaleDateString('en-GB');
             }
             tableHtml += `<td>${data[key]}</td>`;
         }
@@ -127,9 +128,9 @@ function loadHTMLTable(data) {
 
     data.forEach(function ({id, todo, date_added}) {
         tableHtml += "<tr>";
-        tableHtml += `<td>${id}</td>`;
+        tableHtml += `<td class='hiddenId'>${id}</td>`;
         tableHtml += `<td>${todo}</td>`;
-        tableHtml += `<td>${new Date(date_added).toLocaleString()}</td>`;
+        tableHtml += `<td>${new Date(date_added).toLocaleDateString('en-GB')}</td>`;
         tableHtml += `<td><button class="delete-row-btn" data-id=${id}>Delete</td>`;
         tableHtml += `<td><button class="edit-row-btn" data-id=${id}>Edit</td>`;
         tableHtml += "</tr>";
