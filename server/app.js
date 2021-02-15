@@ -69,15 +69,4 @@ app.delete('/delete/:id', (request, response) => {
     .catch(err => console.log(err));
 });
 
-// app.get('/search/:todo', (request, response) => {
-//     const { todo } = request.params;
-//     const db = dbService.getDbServiceInstance();
-
-//     const result = db.searchBytodo(todo);
-    
-//     result
-//     .then(data => response.json({data : data}))
-//     .catch(err => console.log(err));
-// })
-
 app.listen(process.env.PORT, () => console.log(`app is running in port ${process.env.PORT}`));

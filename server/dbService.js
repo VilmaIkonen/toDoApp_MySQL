@@ -100,23 +100,6 @@ class DbService {
             return false;
         }
     }
-
-    // async searchBytodo(todo) {
-    //     try {
-    //         const response = await new Promise((resolve, reject) => {
-    //             const query = "SELECT * FROM todos WHERE todo = ?;";
-
-    //             connection.query(query, [todo], (err, results) => {
-    //                 if (err) reject(new Error(err.message));
-    //                 resolve(results);
-    //             })
-    //         });
-
-    //         return response;
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
 }
 
 module.exports = DbService;
