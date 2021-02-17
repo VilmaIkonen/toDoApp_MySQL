@@ -1,9 +1,78 @@
 document.addEventListener('DOMContentLoaded', function () {
     fetch('http://localhost:5000/getAll')
     .then(response => response.json())
-    .then(data => loadHTMLTable(data['data']));
-    
+    .then(data => loadHTMLTable(data['data']));    
 });
+
+function loadHTMLTable(data) {
+    const table = document.querySelector('table tbody');
+
+    if (data.length === 0) {
+        table.innerHTML = "<tr><td class='no-data' colspan='5'>No Data</td></tr>";
+        return;
+    }
+
+    let tableHtml = "";
+
+    data.forEach(function ({id, todo, date_added}) {
+        tableHtml += "<tr>";
+        tableHtml += `<td id='hiddenId' class='hiddenId'>${id}</td>`;
+        tableHtml += `<td>${todo}</td>`;
+        tableHtml += `<td>${new Date(date_added).toLocaleDateString('en-GB')}</td>`;
+        tableHtml += `<td><button class="delete-row-btn" data-id=${id}>Delete</td>`;
+        tableHtml += `<td><button class="edit-row-btn" data-id=${id}>Edit</td>`;
+        tableHtml += "</tr>";
+    });
+
+    table.innerHTML = tableHtml;
+}
+
+const addBtn = document.querySelector('#add-todo-btn');
+
+addBtn.onclick = function () {
+    const todoInput = document.querySelector('#todo-input');
+    const todo = todoInput.value;
+    todoInput.value = "";
+
+    fetch('http://localhost:5000/insert', {
+        headers: { 'Content-type': 'application/json' },
+        method: 'POST',
+        body: JSON.stringify({ todo: todo})
+    })
+    .then(response => response.json())
+    .then(data => insertRowIntoTable(data['data']));
+}
+
+function insertRowIntoTable(data) {
+    console.log(data);
+    const table = document.querySelector('table tbody');
+    const isTableData = table.querySelector('.no-data');
+
+    let tableHtml = "<tr>";
+
+    for (let key in data) {
+        if (data.hasOwnProperty(key)) {
+            if (key === 'dateAdded') {
+                data[key] = new Date(data[key]).toLocaleDateString('en-GB');
+            // } else if(key === 'id') {
+            //     let element = document.getElementById('hiddenId');
+            //     element.classList.add('hiddenId');
+            }             
+            tableHtml += `<td>${data[key]}</td>`;
+        }
+    }
+
+    tableHtml += `<td><button class="delete-row-btn" data-id=${data.id}>Delete</td>`;
+    tableHtml += `<td><button class="edit-row-btn" data-id=${data.id}>Edit</td>`;
+    tableHtml += "</tr>";
+
+    if (isTableData) {
+        table.innerHTML = tableHtml;
+    } else {
+        const newRow = table.insertRow();
+        newRow.innerHTML = tableHtml;
+    }
+}
 
 document.querySelector('table tbody').addEventListener('click', function(event) {
     if (event.target.className === "delete-row-btn") {
@@ -37,14 +106,11 @@ function handleEditRow(id) {
 updateBtn.onclick = function() {
     const updatetodoInput = document.querySelector('#update-todo-input');
 
-
     console.log(updatetodoInput);
 
     fetch('http://localhost:5000/update', {
         method: 'PATCH',
-        headers: {
-            'Content-type' : 'application/json'
-        },
+        headers: { 'Content-type' : 'application/json' },
         body: JSON.stringify({
             id: updatetodoInput.dataset.id,
             todo: updatetodoInput.value
@@ -59,72 +125,3 @@ updateBtn.onclick = function() {
 }
 
 
-const addBtn = document.querySelector('#add-todo-btn');
-
-addBtn.onclick = function () {
-    const todoInput = document.querySelector('#todo-input');
-    const todo = todoInput.value;
-    todoInput.value = "";
-
-    fetch('http://localhost:5000/insert', {
-        headers: {
-            'Content-type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({ todo : todo})
-    })
-    .then(response => response.json())
-    .then(data => insertRowIntoTable(data['data']));
-}
-
-function insertRowIntoTable(data) {
-    console.log(data);
-    const table = document.querySelector('table tbody');
-    const isTableData = table.querySelector('.no-data');
-
-    let tableHtml = "<tr>";
-
-    for (var key in data) {
-        if (data.hasOwnProperty(key)) {
-            if (key === 'dateAdded') {
-                data[key] = new Date(data[key]).toLocaleDateString('en-GB');
-            }
-            tableHtml += `<td>${data[key]}</td>`;
-        }
-    }
-
-    tableHtml += `<td><button class="delete-row-btn" data-id=${data.id}>Delete</td>`;
-    tableHtml += `<td><button class="edit-row-btn" data-id=${data.id}>Edit</td>`;
-
-    tableHtml += "</tr>";
-
-    if (isTableData) {
-        table.innerHTML = tableHtml;
-    } else {
-        const newRow = table.insertRow();
-        newRow.innerHTML = tableHtml;
-    }
-}
-
-function loadHTMLTable(data) {
-    const table = document.querySelector('table tbody');
-
-    if (data.length === 0) {
-        table.innerHTML = "<tr><td class='no-data' colspan='5'>No Data</td></tr>";
-        return;
-    }
-
-    let tableHtml = "";
-
-    data.forEach(function ({id, todo, date_added}) {
-        tableHtml += "<tr>";
-        tableHtml += `<td class='hiddenId'>${id}</td>`;
-        tableHtml += `<td>${todo}</td>`;
-        tableHtml += `<td>${new Date(date_added).toLocaleDateString('en-GB')}</td>`;
-        tableHtml += `<td><button class="delete-row-btn" data-id=${id}>Delete</td>`;
-        tableHtml += `<td><button class="edit-row-btn" data-id=${id}>Edit</td>`;
-        tableHtml += "</tr>";
-    });
-
-    table.innerHTML = tableHtml;
-}
