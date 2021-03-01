@@ -37,7 +37,7 @@ addBtn.onclick = function () {
     fetch('http://localhost:5000/insert', {
         headers: { 'Content-type': 'application/json' },
         method: 'POST',
-        body: JSON.stringify({ todo: todo})
+        body: JSON.stringify({ todo: todo })
     })
     .then(response => response.json())
     .then(data => insertRowIntoTable(data['data']));

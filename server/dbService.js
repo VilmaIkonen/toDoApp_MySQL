@@ -18,7 +18,6 @@ connection.connect((err) => {
     // console.log('db ' + connection.state);
 });
 
-
 class DbService {
     static getDbServiceInstance() {
         return instance ? instance : new DbService();
